@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Semesterplaner"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Semesterplaner</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+:root{--bg:#eef3f2;--sf:#fff;--ink:#12262b;--mut:#587077;--ln:#cbd8d7;--ac:#0b5f8a;--on:#fff;--bd:#b3261e;--ok:#1f7a45;--g1:#2b6cb0;--g2:#2f9e5e;--g3:#d9ad12;--g4:#e07a1f;--g5:#c93a2e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a1d;--sf:#16262a;--ink:#e5eeee;--mut:#8ea5a9;--ln:#2c4247;--ac:#5bb6e6;--on:#08202a;--bd:#ff8a7e;--ok:#6fd49a}}
+:root[data-theme="dark"]{--bg:#0e1a1d;--sf:#16262a;--ink:#e5eeee;--mut:#8ea5a9;--ln:#2c4247;--ac:#5bb6e6;--on:#08202a;--bd:#ff8a7e;--ok:#6fd49a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 'Atkinson Hyperlegible',system-ui,sans-serif}
+main{max-width:960px;margin:0 auto;padding:14px 12px 48px}
+h1{font-size:26px;margin:4px 0 0}
+small,.mut{color:var(--mut)}
+#tabs{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+button,select,input,textarea{font:inherit;color:inherit}
+button{background:var(--sf);border:1px solid var(--ln);border-radius:8px;padding:6px 11px;cursor:pointer}
+button:hover{border-color:var(--ac)}
+button.on{background:var(--ac);border-color:var(--ac);color:var(--on)}
+button.lnk{border:0;background:none;padding:0;text-align:left;font-weight:700}
+input,select,textarea{background:var(--sf);border:1px solid var(--ln);border-radius:6px;padding:5px 7px;max-width:100%}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:12px 14px;margin:0 0 10px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0}
+.fx{flex:1;min-width:150px}
+.tr{position:relative;flex:1;min-width:90px;height:14px;border:1px solid var(--ln);border-radius:7px;overflow:hidden}
+.tr i{position:absolute;top:0;bottom:0;left:0}
+.tr .c{background:var(--ln)}
+.g1{background:var(--g1)}.g2{background:var(--g2)}.g3{background:var(--g3)}.g4{background:var(--g4)}.g5{background:var(--g5)}
+.w span:first-child{width:112px}.w span:last-child{width:96px;text-align:right}
+.bad{color:var(--bd)}.ok{color:var(--ok)}
+.chip{display:inline-block;border:1px solid var(--ln);border-radius:12px;padding:1px 9px;margin:2px;font-size:13px}
+textarea{width:100%;font:12px/1.4 ui-monospace,monospace}
+label{display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--mut)}
+label.in{flex-direction:row;align-items:center;gap:6px}
+.off{opacity:.55}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 4px 0 10px}
+.wg{display:grid;grid-template-columns:34px repeat(7,minmax(0,1fr));border:1px solid var(--ln);border-radius:8px;overflow:hidden;background:var(--sf);font-size:12px}
+.wh{background:none;border:0;border-left:1px solid var(--ln);border-bottom:1px solid var(--ln);border-radius:0;padding:4px 1px;font-size:12px;line-height:1.25}
+.wh.td{color:var(--ac);font-weight:700}
+.hl div{text-align:right;padding-right:3px;font-size:11px;color:var(--mut)}
+.dc{position:relative;border-left:1px solid var(--ln);cursor:cell;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 33px,var(--ln) 33px,var(--ln) 34px)}
+.dc.sel{background-color:rgba(91,182,230,.14)}
+.ev{position:absolute;left:1px;right:1px;padding:1px 3px;border-radius:4px;font-size:11px;line-height:1.2;overflow:hidden;pointer-events:none;border-left:3px solid}
+.kf{background:#9fb0b566;border-color:#6c7e83;color:var(--ink)}
+.kx{background:#c93a2ee6;border-color:#8c1f17;color:#fff}
+.kl{background:#2b6cb0e6;border-color:#1b4b82;color:#fff}
+.kt{background:#7a5bd0e6;border-color:#53399c;color:#fff}
+.ki{background:#9fb0b533;border-color:#6c7e83;color:var(--ink)}
+.ka{background:#2f9e5e66;border-color:#2f9e5e;color:var(--ink)}
+.mg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:8px;overflow:hidden}
+.mhd{background:var(--sf);text-align:center;font-size:12px;color:var(--mut);padding:3px}
+.mc{background:var(--sf);min-height:76px;padding:3px;font-size:11px;cursor:pointer;overflow:hidden}
+.mc.om{opacity:.45}.mc.sel{outline:2px solid var(--ac);outline-offset:-2px}.mc.td b{color:var(--ac)}
+.mx,.mh{border-radius:3px;padding:0 3px;margin-top:2px;color:#fff}
+.mx{background:var(--g5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mh{display:inline-block}.mh.g3{color:#000}
+.mm{color:var(--mut)}
+@media (max-width:520px){h1{font-size:22px}}
+
+.wkb{border-top:1px solid var(--ln);margin-top:8px;padding-top:4px}
+.big{font:700 26px/1.1 'Atkinson Hyperlegible',system-ui,sans-serif}
+.ev{pointer-events:auto;cursor:pointer;color:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.ev.ka{color:var(--ink)}
+.ev.pf{box-shadow:inset 0 0 0 2px rgba(255,255,255,.9)}
+.ad{border-left:1px solid var(--ln);border-bottom:1px solid var(--ln);padding:1px;min-height:22px;overflow:hidden}
+.ad i{display:block;font-style:normal;font-size:10px;line-height:1.3;border-radius:3px;padding:0 3px;margin:1px 0;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-height:82vh;overflow:auto;background:var(--sf);border-top:3px solid var(--ac);box-shadow:0 -6px 24px rgba(0,0,0,.25);z-index:20;padding:12px 14px calc(14px + env(safe-area-inset-bottom,0px))}
+.sheet>div{max-width:940px;margin:0 auto}
+.sw{display:inline-block;position:relative}
+.sw input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
+.sw i{display:block;width:26px;height:26px;border-radius:50%;border:3px solid transparent;box-shadow:0 0 0 1px var(--ln)}
+.sw input:checked+i{border-color:var(--ink)}
+.sw input:focus-visible+i{outline:2px solid var(--ac);outline-offset:2px}
+.ph{border-bottom:1px solid var(--ln);padding:6px 0;margin:0}
+.ph .dt{width:84px}
+.phb{display:inline-block;min-width:92px;text-align:center;border-radius:12px;padding:1px 8px;font-size:13px;color:#fff}
+.p-L{background:var(--g1)}.p-W{background:var(--g4)}.p-R{background:#6c7e83}.p-X{background:var(--g5)}
+.ul{list-style:none;padding:0;margin:6px 0}
+.ty{font-size:12px;border:1px solid var(--ln);border-radius:10px;padding:0 7px;color:var(--mut)}
+.chip.on{background:var(--ac);color:var(--on);border-color:var(--ac)}
+button.chip{background:var(--sf);cursor:pointer}
+</style>
+</head>
+<body>
+<main>
+<h1>Semesterplaner</h1>
+<small id="hd"></small><small id="cl"></small>
+<div id="tabs"></div>
+<div id="v"></div>
+</main>
+<script>
+const K='sp-v1',DN=['Mo','Di','Mi','Do','Fr','Sa','So'],TB=[['ov','Übersicht'],['ca','Kalender'],['ex','Prüfungen'],['pl','Lernplan'],['td','Aufgaben'],['dy','Tagesplan'],['se','Einstellungen'],['io','Export & Backup']];
+const $=i=>document.getElementById(i),pad=n=>String(n).padStart(2,'0'),fmt=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),
+prs=s=>{const p=String(s).split('-').map(Number);return new Date(p[0],p[1]-1,p[2])},
+add=(s,n)=>{const d=prs(s);d.setDate(d.getDate()+n);return fmt(d)},wd=s=>(prs(s).getDay()+6)%7,
+dl=s=>s?DN[wd(s)]+' '+s.slice(8)+'.'+s.slice(5,7)+'.'+s.slice(0,4):'–',r5=x=>Math.round(x*2)/2,
+esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),uid=()=>Math.random().toString(36).slice(2,8),
+msg=t=>{const m=$('msg');if(m)m.textContent=t},
+th=s=>{const m=/^(\d{1,2}):(\d{2})/.exec(s||'');return m?+m[1]+m[2]/60:null},ht=h=>{const m=Math.round(h*60);return pad(Math.floor(m/60))+':'+pad(m%60)},
+de=s=>s.slice(8)+'.'+s.slice(5,7)+'.'+s.slice(0,4),
+pd=s=>{s=String(s).trim();let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/),y,d,n;
+ if(m){y=+m[1];n=+m[2];d=+m[3]}else{m=s.match(/^(\d{1,2})[.\-\/](\d{1,2})(?:[.\-\/](\d{2,4})?)?$/);if(!m)return null;d=+m[1];n=+m[2];y=m[3]?+m[3]:0;if(y&&y<100)y+=2000;
+  if(!y){const t=new Date(),c=new Date(t.getFullYear(),n-1,d);y=t.getFullYear()+(c<new Date(t.getFullYear(),t.getMonth(),t.getDate())?1:0)}}
+ const o=new Date(y,n-1,d);return o.getMonth()===n-1&&o.getDate()===d?fmt(o):null},
+pdl=v=>{const o=[];String(v).split(/[,;]+/).forEach(q=>{const r=q.split(/\s+bis\s+/i).map(pd);if(r.length==2&&r[0]&&r[1]){for(let d=r[0];d<=r[1]&&o.length<400;d=add(d,1))o.push(d)}else if(r[0])o.push(r[0])});return[...new Set(o)].sort()},
+SP=['grund','prüfu','klaus','vorbe'],tk=s=>(String(s).toLowerCase().match(/[a-zäöüß]{5,}/g)||[]).map(x=>x.slice(0,5)).filter(x=>!SP.includes(x)),sw=(a,b)=>{const t=tk(b);return tk(a).some(x=>t.includes(x))},
+tms=e=>e.a!=null&&e.b!=null?' '+ht(e.a)+'–'+ht(e.b):'';
+
+/* ===== Konstanten ===== */
+const PAL=['#2b6cb0','#c93a2e','#7a5bd0','#2f9e5e','#e07a1f','#0f8b8d','#c2417a','#6c7e83'],PN=['Blau','Rot','Lila','Grün','Orange','Türkis','Rosa','Grau'],
+TY={H:'Herleitung',S:'Skizze',D:'Definition',R:'Rechnen',M:'Merken'},MN=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'],RH=34,H0=6,H1=24,
+PHY={c:[],rl:[],no:''};
+
+/* ===== Daten, Migration, Speicher ===== */
+function defs(){return{v:3,mn:[1,.5],f:100,show:14,win:[8,20,8,20,8,20,8,20,8,20,8,20,8,20],mx:[6,6,6,8,7,3,7],cm:1.25,pf:85,td:[],me:[],ev:[],dn:{},free:'',fx:[],wk:[],ex:[]}}
+function mig(o){const D=defs();
+ if(!o.fx)o.fx=D.fx;if(!o.me)o.me=[];if(!o.td)o.td=[];if(!o.dn)o.dn={};if(!o.ev)o.ev=[];if(!o.free)o.free='';
+ if(!o.win||o.win.length!==14){o.win=D.win;o.mx=D.mx;o.cm=D.cm;o.pf=D.pf}
+ if(!o.mn)o.mn=[1,.5];o.wk=o.wk||D.wk;
+ if((o.v||1)<2){o.fx.forEach(f=>{if(f.n==='Job')f.n='Tennis'});const w1=o.wk.find(x=>x.id==='w1'&&x.tm===undefined);if(w1){w1.tm=13;w1.a='2026-11-09';w1.z='2027-01-11';w1.bu=1}o.v=2}
+ o.wk.forEach(w=>{if(w.tm===undefined)w.tm=null;if(w.bu===undefined)w.bu=1;if(w.dw===undefined)w.dw=w.a?wd(w.a):0;if(w.rw===undefined){w.rw=null;w.rt=null}});
+ if((o.v||1)<3){const w1=o.wk.find(x=>x.id==='w1');if(w1&&w1.rw==null){w1.rw=1;w1.rt=19;w1.dw=0;if(w1.tm==null)w1.tm=13}o.v=3}
+ o.fx.forEach(f=>{if(!f.id){f.id=uid();f.x=[];f.m=/anwesenheitspflicht/i.test(f.n)?1:0;f.uc=/^(VO|UE|VU|SE|PR)\b/.test(f.n)?1:0;f.c=7}});
+ o.ex.forEach(e=>{const d=D.ex.find(x=>x.n===e.n);if(e.a===undefined){e.a=d?d.a:null;e.b=d?d.b:null}
+  if(d&&d.no&&e.no===undefined){e.no=d.no;e.rl=d.rl;e.pq=d.pq;e.pm=d.pm;if(e.c.length===1&&e.c[0].n==='Gesamter Stoff'&&!e.c[0].d)e.c=d.c}});
+ return o}
+let S=load(),tab='ov',sel=null,lp='plan',fl='',eed=0,lpAll=0,px=null,tm=0,run=null,cloud=null,gh=null,ct=null,cbusy=0,cal={v:typeof innerWidth!=='undefined'&&innerWidth<640?'d':'w',d:fmt(new Date()),e:null};
+function load(){try{const j=localStorage.getItem(K);if(j){const o=JSON.parse(j);if(o&&o.ex)return mig(o)}}catch(e){}return defs()}
+const cst=t=>{const h=$('cl');if(h)h.textContent=t};
+function save(){S.ts=Date.now();try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}if(cloud||gh){clearTimeout(ct);ct=setTimeout(push,1500)}}
+async function push(){ct=null;if(cbusy){ct=setTimeout(push,1500);return}cbusy=1;
+ try{if(cloud){await cloud.set({j:JSON.stringify(S),ts:S.ts||0});cst('☁ synchronisiert')}else if(gh){await ghPush();cst('☁ GitHub synchronisiert')}}
+ catch(e){cst('Sync-Fehler: '+(e&&e.message||e&&e.code||'unbekannt')+'. Daten liegen im Browser.')}cbusy=0}
+async function dbInit(){const bad=t=>cst('Cloud aus: '+t+'. Daten liegen nur in diesem Browser.');
+ try{if(typeof claude==='undefined'||!claude.use){gh=gh||ghc();if(gh&&gh.id){await ghPull()}else cst('Daten nur in diesem Browser. Cloud-Sync einrichten: Tab „Export & Backup“.');return}
+  const db=await claude.use('db');if(!db)return bad('in dieser Ansicht nicht verfügbar (Planer innerhalb von claude.ai öffnen, nicht als eigenes Fenster)');
+  const us=await claude.use('user'),id=us?await us.id():null;if(!id)return bad('keine Nutzerkennung (angemeldet?)');
+  cloud=db.collection('data/users/'+id).doc('plan');const sn=await cloud.get(),r=sn.exists?sn.data():null;
+  if(r&&r.j&&(!S.ts||r.ts>S.ts)){S=mig(JSON.parse(r.j));try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}render();cst('☁ aus der Cloud geladen');return}
+  await push()}catch(e){bad('Fehler '+(e&&e.code||e&&e.message||'unbekannt'))}}
+/* ===== Eigenständige Version: Cloud-Sync über GitHub-Gist ===== */
+const GH='https://api.github.com',GF='semesterplaner.json',GI='semesterplan.ics',
+ghc=()=>{try{return JSON.parse(localStorage.getItem('sp-gh')||'null')}catch(e){return null}},
+feedUrl=()=>'https://gist.githubusercontent.com/'+gh.user+'/'+gh.id+'/raw/'+GI,
+ghBody=()=>({[GF]:{content:JSON.stringify({j:JSON.stringify(S),ts:S.ts||0})},[GI]:{content:icsText()}});
+async function ghf(path,method,body){const r=await fetch(GH+path,{method:method||'GET',headers:{Authorization:'Bearer '+gh.tok,Accept:'application/vnd.github+json','Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+ if(!r.ok){const e=new Error(r.status===401?'Token ungültig oder abgelaufen':'GitHub-Fehler '+r.status);e.code=r.status;throw e}return r.json()}
+async function ghPush(){await ghf('/gists/'+gh.id,'PATCH',{files:ghBody()})}
+async function ghPull(){const g=await ghf('/gists/'+gh.id),f=g.files&&g.files[GF];if(!f){await ghPush();return cst('☁ GitHub synchronisiert')}
+ const r=JSON.parse(f.content);if(r&&r.j&&(!S.ts||r.ts>S.ts)){S=mig(JSON.parse(r.j));try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}render();cst('☁ GitHub: neuester Stand geladen')}
+ else{if((S.ts||0)>(r.ts||0))await ghPush();cst('☁ GitHub synchronisiert')}}
+async function ghConnect(tok){gh={tok,id:null,user:null};let f=null;
+ for(let p=1;p<=5&&!f;p++){const L=await ghf('/gists?per_page=100&page='+p);f=L.find(g=>g.files&&g.files[GF]);if(L.length<100)break}
+ if(f){gh.id=f.id;gh.user=f.owner.login}else{const g=await ghf('/gists','POST',{description:'Semesterplaner Daten (bitte nicht löschen)',public:false,files:ghBody()});gh.id=g.id;gh.user=g.owner.login}
+ localStorage.setItem('sp-gh',JSON.stringify(gh));await ghPull()}
+async function ghGo(){const t=$('ght').value.trim(),m=$('ghm');if(!t){m.textContent='Bitte Token einfügen.';return}m.textContent='Verbinde …';
+ try{await ghConnect(t);render()}catch(e){gh=null;m.textContent='Verbindung fehlgeschlagen: '+(e&&e.message||'unbekannt')}}
+function ghOff(){try{localStorage.removeItem('sp-gh')}catch(e){}gh=null;cst('Cloud getrennt. Daten bleiben in diesem Browser.');render()}
+function vSync(){if(typeof claude!=='undefined')return `<div class="card"><b>Cloud-Sync</b><br><small>In claude.ai nutzt der Planer den Claude-Cloud-Speicher (Status oben). Für Sync in jedem Browser und auf dem Handy sowie einen Kalender-Abo-Link nutze die eigenständige Version (index.html), die sich über GitHub synchronisiert.</small></div>`;
+ return `<div class="card"><b>Cloud-Sync über GitHub</b><br><small>Speichert alles automatisch in einem Gist deines GitHub-Kontos und gleicht es zwischen allen Geräten ab, auf denen du dasselbe Token einträgst.</small>`+(gh&&gh.id?`<div class="row"><b class="ok">Verbunden</b><small>als ${esc(gh.user||'')}</small><button onclick="dbInit()">Jetzt abgleichen</button><button onclick="ghOff()">Trennen</button></div><label>Kalender-Abo-Link (Google, Outlook, Apple)<input readonly value="${feedUrl()}" onclick="this.select()"></label><label>Apple Kalender (webcal)<input readonly value="${feedUrl().replace('https://','webcal://')}" onclick="this.select()"></label><small>Der Link enthält Prüfungen, Abgaben und geplante Lernblöcke. GitHub aktualisiert die Datei etwa alle 5 Minuten, Kalender-Apps laden meist stündlich nach. Wer den Link kennt, kann deinen Plan sehen.</small>`:`<div><small>1. <a href="https://github.com/settings/tokens/new?scopes=gist&description=Semesterplaner" target="_blank" rel="noopener">Token erstellen</a> (nur Recht „gist“, Ablauf „No expiration“) und kopieren.<br>2. Hier einfügen:</small></div><div class="row"><input id="ght" class="fx" type="password" placeholder="ghp_…"><button class="on" onclick="ghGo()">Verbinden</button></div>`)+`<div id="ghm" class="bad"></div></div>`}
+function up(){save();render()}
+
+/* ===== Hilfen, Zeiten, Kapazität ===== */
+const totH=e=>e.c.reduce((a,c)=>a+c.h,0),cp0=c=>c.k&&c.k.length?c.k.filter(q=>q.d).length/c.k.length:(c.d?1:0),remH=e=>e.c.reduce((a,c)=>a+c.h*(1-cp0(c)),0),fe=id=>S.ex.find(e=>e.id===id),
+bfOf=e=>{const t=totH(e);return typeof e.bf==='number'&&e.bf>0?e.bf:t>=60?4:t>=30?3:t>=12?2:1},
+rvOf=e=>{const t=totH(e);return typeof e.rv==='number'?e.rv:t>=30?20:t>=12?15:10},
+pre=(e,t0)=>S.me.reduce((a,m)=>a+(m.k===e.id&&m.ty==='l'&&m.d>=t0?m.b-m.a:0),0),
+lo=P=>{const l={};P.T.forEach(t=>{if(t.e&&t.r>.5)l[t.k]=(l[t.k]||0)+t.r});return l},
+sx=()=>S.ex.slice().sort((p,q)=>{const k=e=>(e.off||e.dn?'z':'a')+(e.o[e.s]||'9')+String(Math.round((e.a||0)*10)).padStart(3,'0');return k(p)<k(q)?-1:k(p)>k(q)?1:0}),
+prog=cs=>{let a=0,b=0;cs.forEach(c=>{if(c.k&&c.k.length){b+=c.k.length;a+=c.k.filter(q=>q.d).length}else{b++;if(c.d)a++}});return[a,b,b?Math.round(100*a/b):0]};
+function busy(d){const B=[],w=wd(d);
+ S.fx.forEach(f=>{if(f.wd===w&&d>=f.f&&d<=f.u&&!(f.x||[]).includes(d))B.push({a:f.a,b:f.b,n:f.n,k:'kf',c:f.c??7,m:f.m,u:f.uc,s:'fx',id:f.id})});
+ S.ex.forEach(e=>{if(!e.off&&!e.dn&&e.o[e.s]===d&&e.a!=null&&e.b>e.a)B.push({a:e.a,b:e.b,n:e.n,k:'kx',c:1,m:1,u:1,s:'ex',id:e.id})});
+ S.me.forEach(m=>{if(m.d===d)B.push({a:m.a,b:m.b,n:m.t,k:m.ty==='l'?'kl':'kt',c:m.c??(m.ty==='l'?0:2),m:m.m,u:m.uc,s:'me',id:m.id})});
+ S.ev.forEach(v=>{if(v.d===d&&v.a!=null&&v.h>0)B.push({a:v.a,b:v.a+v.h,n:v.t,k:'ki',c:7,s:'ev',id:''})});
+ return B}
+function free(d){const w=wd(d),ws=S.win[2*w],we=S.win[2*w+1],A=busy(d).filter(e=>e.b>e.a),C=A.filter(e=>e.u),B=A.map(e=>[e.a,e.b]);
+ if(C.length){const a=Math.min(...C.map(e=>e.a)),b=Math.max(...C.map(e=>e.b));B.push([a-S.cm,a],[b,b+S.cm])}
+ B.sort((p,q)=>p[0]-q[0]);const R=[];let t=ws;
+ for(const x of B){if(x[0]>t)R.push([t,Math.min(x[0],we)]);t=Math.max(t,x[1]);if(t>=we)break}
+ if(t<we)R.push([t,we]);return R.filter(r=>r[1]-r[0]>=S.mn[0]-.001)}
+const freeIn=(d,lo,hi)=>free(d).reduce((a,r)=>a+Math.max(0,Math.min(r[1],hi)-Math.max(r[0],lo)),0),
+dwOf=w=>typeof w.dw==='number'?w.dw:wd(w.a),
+wkDates=w=>{const o=[];if(!w.a||!w.z)return o;for(let d=add(w.a,(dwOf(w)-wd(w.a)+7)%7);d<=w.z&&o.length<200;d=add(d,7))o.push(d);return o},
+relOf=(w,d)=>typeof w.rw==='number'?[add(d,-(((wd(d)-w.rw+7)%7)||7)),w.rt??0]:[add(d,-6),null];
+function capOf(d){if(S.free.split(/[,\s]+/).includes(d))return 0;
+ const fr=free(d),tot=fr.reduce((a,r)=>a+r[1]-r[0],0),ml=busy(d).filter(e=>e.k==='kl').reduce((a,e)=>a+e.b-e.a,0);
+ let c=Math.min(S.mx[wd(d)]-ml,tot*S.pf/100)-S.ev.reduce((a,v)=>a+(v.d===d&&v.a==null?v.h:0),0);
+ if(S.ex.some(e=>!e.off&&!e.dn&&e.o[e.s]===d&&e.a==null))c*=.5;return Math.max(0,c)}
+function place(x){const F=free(x.d).map(r=>r.slice()),R=[],lim=a=>a.lm!=null||a.ls!=null?0:1,its=x.it.slice().sort((a,b)=>lim(a)-lim(b));
+ for(const it of its){let h=it.h;const mn=it.rv?S.mn[1]:S.mn[0];
+  for(let i=0;i<F.length&&h>.01;i++){const r=F[i],s0=Math.max(r[0],it.ls??0),L=Math.min(r[1],it.lm??99)-s0;if(L<mn-.001)continue;
+   let g=Math.min(h,L);if(h-g>.01&&h-g<mn){g=h-mn;if(g<mn)g=0}if(g<=.01)continue;
+   R.push({s:s0,e:s0+g,n:it.n,k:it.k});h-=g;const pt=[];if(s0-r[0]>.01)pt.push([r[0],s0]);if(r[1]-s0-g>.01)pt.push([s0+g,r[1]]);F.splice(i,1,...pt);i+=pt.length-1}}
+ return R}
+
+/* ===== Planer: Lernen früh fertig, Wiederholung kurz vor der Prüfung ===== */
+function plan(){const t0=fmt(new Date()),T=[],f=S.f/100;
+ S.ex.forEach(e=>{const dt=e.o[e.s];if(e.off||e.dn||!dt||dt<t0)return;
+  const tot=totH(e),bf=bfOf(e),rv=rvOf(e),L=Math.max(0,remH(e)*f*(1-rv/100)-pre(e,t0)),R=e.rd?0:tot*f*rv/100;
+  if(L>.01)T.push({k:e.id,n:e.n,r:L,due:add(dt,-1),sd:add(dt,-bf-1),st:add(dt,-Math.round(14+L/2)),p:e.p,e,r0:L});
+  if(R>.01)T.push({k:e.id,n:e.n+' (Wiederholen)',r:R,due:add(dt,-1),sd:add(dt,-1),st:add(dt,-bf),p:e.p,e,rv:1,cap:Math.max(1.5,1.6*R/bf)})});
+ S.wk.forEach(w=>{const bu=typeof w.bu==='number'?w.bu:1;for(const d of wkDates(w)){const k=w.id+'@'+d,rl=relOf(w,d),u=d<t0?t0:d;T.push({k,n:w.n,r:S.dn[k]?0:w.h,due:u,sd:add(u,-bu),st:rl[0],p:2,w,d,wkk:k,tm:w.tm,td:d,rt:rl[1],rd:rl[0]})}});
+ const days=[],end=add(T.reduce((m,t)=>t.due>m?t.due:m,t0),1),kr=t=>t.rv?0:1,dd=(a,b)=>Math.round((prs(b)-prs(a))/864e5);
+ for(let d=t0;d<=end;d=add(d,1)){
+  T.forEach(t=>{if(t.rv&&t.st<=d&&!t.adj){t.adj=1;const L=T.find(x=>x.k===t.k&&!x.rv);if(L&&L.r0>0)t.r=Math.min(t.r,Math.max(1.5,t.r*(1-L.r/L.r0)))}});
+  const cap=capOf(d),day={d,cap,used:0,it:[]},rho=t=>t.r/Math.max(1,dd(d,t.sd>=d?t.sd:t.due)+1)*(t.p===2?1.25:t.p===0?.8:1),
+  C=T.filter(t=>t.r>.01&&t.st<=d&&t.due>=d).sort((a,b)=>(!!b.w-!!a.w)||kr(a)-kr(b)||(+(b.sd<=d)-+(a.sd<=d))||rho(b)-rho(a)),
+  give=(t,mx)=>{const mn=t.rv?S.mn[1]:S.mn[0],q=day.it.find(i=>i.k===t.k&&i.rv===(t.rv||0)),hi=t.tm!=null&&d===t.td?t.tm:24,lo=t.rt!=null&&d===t.rd?t.rt:0,lim=hi<24||lo>0?Math.max(0,freeIn(d,lo,hi)*S.pf/100-(q?q.h:0)):99,g=Math.min(Math.max(t.r,q?0:mn),mx,cap-day.used,lim);if(g<=.01||(!q&&(g<mn-.01||t.r<.25)))return;t.r=Math.max(0,t.r-g);day.used+=g;q?q.h+=g:day.it.push({n:t.n,h:g,k:t.k,rv:t.rv||0,lm:hi<24?hi:null,ls:lo>0?lo:null})};
+  C.forEach(t=>give(t,t.rv?t.cap:Math.max(2.5,cap*.5)));C.forEach(t=>give(t,99));days.push(day)}
+ const dm={};days.forEach(x=>dm[x.d]=x);return{days,T,t0,dm,co:coll()}}
+function coll(){const t0=fmt(new Date()),A=S.ex.filter(e=>!e.off&&!e.dn&&e.o[e.s]>=t0),R=[],ov=(a,b,c,d)=>a<d&&c<b,tm=e=>e.a!=null&&e.b>e.a;
+ A.forEach((e,i)=>{const d=e.o[e.s];
+  A.slice(i+1).forEach(f=>{if(f.o[f.s]!==d)return;
+   if(tm(e)&&tm(f)){if(ov(e.a,e.b,f.a,f.b))R.push([1,'Kollision am '+dl(d)+': '+e.n+' ('+tms(e).trim()+') und '+f.n+' ('+tms(f).trim()+')'])}
+   else R.push([0,'Zwei Prüfungen am '+dl(d)+': '+e.n+' und '+f.n+' – bitte Uhrzeiten eintragen.'])});
+  if(tm(e))busy(d).forEach(b=>{if(b.k!=='kx'&&b.b>b.a&&ov(e.a,e.b,b.a,b.b)&&!sw(e.n,b.n))R.push([b.m?1:0,e.n+' ('+dl(d)+','+tms(e)+') überschneidet sich mit '+(b.m?'Pflichttermin':'Termin')+': '+b.n])})});
+ return R}
+const coCard=P=>P.co.length?`<div class="card"><b>Kollisionen &amp; Hinweise</b>${P.co.map(c=>`<div class="${c[0]?'bad':'mut'}">${c[0]?'⚠ ':'ℹ '}${esc(c[1])}</div>`).join('')}</div>`:'';
+
+/* ===== Ansichten ===== */
+const tdRow=t=>{const n=t.d?Math.round((prs(t.d)-prs(fmt(new Date())))/864e5):null,x=fe(t.k);
+ return `<div class="row${t.done?' off':''}"><input type="checkbox"${t.done?' checked':''} onchange="TD('${t.id}','done',this.checked?1:0)"><span class="fx">${esc(t.t)}${x?` <small>· ${esc(x.n)}</small>`:''}</span>${t.d?`<span class="${!t.done&&n<0?'bad':'mut'}">${dl(t.d)}${t.tm!=null?' '+ht(t.tm):''}${t.done?'':n<0?' (überfällig)':n===0?' (heute)':' (in '+n+' T.)'}</span>`:''}<button onclick="S.td=S.td.filter(y=>y.id!=='${t.id}');up()">×</button></div>`};
+function vOv(P){const W=wsum(P),mx=Math.max(1,...W.map(x=>Math.max(x.c,x.u+x.m))),ms=W.reduce((a,x)=>a+x.m,0),us=W.reduce((a,x)=>a+x.u,0),cs=W.reduce((a,x)=>a+x.c,0),lost=lo(P),
+ ex=S.ex.filter(e=>!e.off&&!e.dn&&e.o[e.s]>=P.t0).sort((a,b)=>a.o[a.s]<b.o[b.s]?-1:a.o[a.s]>b.o[b.s]?1:(a.a||0)-(b.a||0)),
+ td=S.td.filter(t=>!t.done).sort((a,b)=>(a.d||'9')<(b.d||'9')?-1:1).slice(0,5);
+ return coCard(P)+(td.length?`<div class="card"><b>Aufgaben &amp; Fristen</b>${td.map(tdRow).join('')}<button onclick="tab='td';render()">Alle Aufgaben</button></div>`:'')+
+`<div class="card"><div class="row"><b>Aufwand-Faktor</b><input type="range" min="30" max="130" step="5" value="${S.f}" onchange="S.f=+this.value;up()"><b>${S.f} %</b><small>70 % ≈ „Bestehen reicht“</small></div>
+<p>Offen: <b>${Math.round(us+ms)} h</b> · Verfügbare Lernzeit bis zum letzten Termin: <b>${Math.round(cs)} h</b> · ${ms>.5?`<b class="bad">es fehlen ca. ${Math.round(ms)} h</b>`:'<b class="ok">alles passt</b>'}</p>
+<small>Rot = Stunden, die vor dem Termin nicht mehr unterkommen. Hebel: Prüfungen auf spätere Termine legen, Faktor senken, Termine im Kalender löschen oder verschieben (gibt Lernzeit frei).</small></div>
+<div class="card"><b>Wochenlast</b> <small class="lg"><i class="g1"></i>frei<i class="g2"></i>ok<i class="g3"></i>knapp<i class="g4"></i>voll<i class="g5"></i>zu viel</small>
+${W.map(x=>`<div class="row w"><span>${dl(x.w)}</span><div class="tr"><i class="c" style="width:${x.c/mx*100}%"></i><i class="${cl(x)}" style="width:${x.u/mx*100}%"></i><i class="g5" style="left:${x.u/mx*100}%;width:${x.m/mx*100}%"></i></div><span>${Math.round(x.u+x.m)} / ${Math.round(x.c)} h</span></div>`).join('')}</div>
+<div class="card"><b>Prüfungen nach Datum</b>${ex.map(e=>{const d=e.o[e.s],p=prog(e.c)[2],n=Math.round((prs(d)-prs(P.t0))/864e5);
+ return `<div class="row"><span>${dl(d)}${tms(e)}</span><button class="lnk fx" onclick="sel='${e.id}';tab='pl';render()">${e.p==2?'★ ':''}${esc(e.n)}</button><span>in ${n} T.</span><div class="tr" style="max-width:90px"><i class="g2" style="width:${p}%"></i></div>${lost[e.id]?`<b class="bad">fehlt ${r5(lost[e.id])} h</b>`:''}</div>`}).join('')}</div>`}
+const exCard=(e,lost)=>{const t=totH(e),p=prog(e.c)[2];
+ return `<div class="card${e.off?' off':''}"><div class="row"><input class="fx" value="${esc(e.n)}" onchange="E('${e.id}','n',this.value)"><select onchange="E('${e.id}','p',+this.value)">${['niedrig','normal','hoch'].map((n,i)=>`<option value="${i}"${e.p==i?' selected':''}>Priorität ${n}</option>`).join('')}</select></div>
+<div class="row"><label>Gewählter Termin<select onchange="E('${e.id}','s',+this.value)">${e.o.map((d,i)=>`<option value="${i}"${e.s==i?' selected':''}>${dl(d)}</option>`).join('')}</select></label><label>Von<input type="time" value="${e.a==null?'':ht(e.a)}" onchange="ET('${e.id}','a',this.value)"></label><label>Bis<input type="time" value="${e.b==null?'':ht(e.b)}" onchange="ET('${e.id}','b',this.value)"></label><label class="fx">Terminoptionen (TT.MM.JJJJ, mit Komma)<input value="${e.o.map(de).join(', ')}" onchange="EO('${e.id}',this.value)"></label></div>
+<div class="row"><span>${t} h · ${p} % erledigt</span>${lost[e.id]?`<b class="bad">fehlt ${r5(lost[e.id])} h</b>`:''}<button onclick="sel='${e.id}';tab='pl';render()">Lernplan</button><label class="in"><input type="checkbox"${e.off?' checked':''} onchange="E('${e.id}','off',this.checked?1:0)">später / nicht dieses Semester</label><label class="in"><input type="checkbox" onchange="E('${e.id}','dn',this.checked?1:0)">geschrieben</label><button onclick="delEx('${e.id}')">Löschen</button></div></div>`};
+function vEx(P){const lost=lo(P),t0=P.t0,L=sx(),act=L.filter(e=>!e.dn&&!(e.o[e.s]<t0)),arc=L.filter(e=>e.dn||e.o[e.s]<t0).reverse();
+ return coCard(P)+`<div class="row"><button onclick="addEx()">+ Prüfung</button><small>Termine als TT.MM.JJJJ eintippen (mehrere mit Komma). Die Liste sortiert sich nach dem gewählten Termin.</small></div>`+act.map(e=>exCard(e,lost)).join('')+
+ `<div class="card"><b>Archiv (${arc.length})</b><br><small>Geschriebene und vergangene Prüfungen werden nicht mehr eingeplant. Hier kannst du Noten festhalten.</small>${arc.map(e=>`<div class="row"><span class="fx">${esc(e.n)} <small>${dl(e.o[e.s])}</small></span><input size="4" placeholder="Note" value="${esc(e.gr||'')}" onchange="E('${e.id}','gr',this.value)"><button onclick="E('${e.id}','dn',${e.dn?0:1})">${e.dn?'Aktivieren':'Als geschrieben markieren'}</button></div>`).join('')}</div>`}
+
+/* Lernplan nach dem Physik-Konzept: Phasen, Themen-Checkliste, Probeprüfung, Tutor-Prompts */
+function vPl(P){const e=fe(sel)||sx().find(x=>!x.dn)||S.ex[0];if(!e)return'<div class="card">Noch keine Prüfung angelegt.</div>';sel=e.id;
+ const g=prog(e.c),X=e.o[e.s],N=X?Math.round((prs(X)-prs(P.t0))/864e5):null,gs=[...new Set(e.c.map(c=>c.g).filter(Boolean))];
+ return `<div class="card"><div class="row"><select class="fx" onchange="sel=this.value;px=null;render()">${sx().map(x=>`<option value="${x.id}"${x.id===e.id?' selected':''}>${esc(x.n)}</option>`).join('')}</select><b>${dl(X)}${tms(e)}</b></div>
+<div class="row"><span class="big">${N==null?'–':N<0?'vorbei':N}</span><small>Tage übrig</small><span class="big">${g[2]} %</span><small>${g[0]} von ${g[1]} Punkten</small></div><div class="tr"><i class="g2" style="width:${g[2]}%"></i></div>
+${gs.map(w=>{const p=prog(e.c.filter(c=>c.g===w));return `<div class="row"><span style="width:130px">${esc(w)}</span><div class="tr"><i class="g1" style="width:${p[2]}%"></i></div><b>${p[2]} %</b></div>`}).join('')}</div>
+<div class="row">${[['plan','Phasenplan'],['th','Themen & Checkliste'],['pr','Probeprüfung']].map(t=>`<button class="${lp===t[0]?'on':''}" onclick="lp='${t[0]}';render()">${t[1]}</button>`).join('')}</div>`+(lp==='plan'?lpPlan(e,P):lp==='th'?lpTh(e):lpPr(e))}
+function lpPlan(e,P){const X=e.o[e.s];if(!X||X<P.t0)return'<div class="card">Der Prüfungstermin fehlt oder liegt in der Vergangenheit.</div>';
+ const tot=totH(e),bf=bfOf(e),rv=rvOf(e),cs=e.c.filter(c=>cp0(c)<1).map(c=>({n:c.n,r:c.h*(1-cp0(c))*(1-rv/100)*S.f/100})),rl=e.rl&&e.rl.length?e.rl:e.c.map(c=>'Wiederholen: '+c.n+' (Definitionen, Herleitungen, Skizzen)'),rows=[];let ci=0,ri=0;
+ for(let d=P.t0;d<=X;d=add(d,1)){const x=P.dm[d],it=x?x.it.filter(i=>i.k===e.id):[],hl=it.filter(i=>!i.rv).reduce((a,i)=>a+i.h,0),hr=it.filter(i=>i.rv).reduce((a,i)=>a+i.h,0);let c,ph,tx;
+  if(d===X){c='X';ph='Prüfung';tx='Prüfung'+tms(e)+'. Ruhig bleiben, Zwischenschritte und Skizzen nicht vergessen.'}
+  else if(bf>=2&&d===add(X,-1)){c='R';ph='Ruhetag';tx='Nur Formeln und Standard-Skizzen überfliegen, früh schlafen.'}
+  else if(d>=add(X,-bf)){c='W';ph='Wiederholen';tx=bf>=3&&d===add(X,-bf+1)?'Probeprüfung (Tab „Probeprüfung“), danach Fehler nacharbeiten.':rl.length?rl[ri++%rl.length]:'Stoff wiederholen'}
+  else{c='L';ph='Lernen';let q=hl,nm=[];while(q>.01&&ci<cs.length){const t=cs[ci],u=Math.min(q,t.r);nm.push(t.n);t.r-=u;q-=u;if(t.r<=.01)ci++}
+   tx=nm.length?nm.map(n=>`<button class="chip" onclick="lp='th';render()">${esc(n)}</button>`).join(''):'<span class="mut">Keine Lernzeit für dieses Fach eingeplant</span>'}
+  rows.push(`<div class="row ph"><div class="dt"><b>${DN[wd(d)]}</b> ${d.slice(8)}.${d.slice(5,7)}.</div><span class="phb p-${c}">${ph}</span><div class="fx">${tx}</div><small>${hl+hr>0?r5(hl+hr)+' h':''}</small></div>`)}
+ return `<div class="card"><small>Lernen ist ${bf+1} Tage vor der Prüfung abgeschlossen, danach ${bf} Tage Wiederholung (${rv} % der Zeit). Die Zeiten stammen aus dem automatischen Plan und passen sich an, wenn du Termine änderst.${e.no?'<br><br>'+esc(e.no):''}</small></div>`+rows.slice(0,lpAll?999:14).join('')+(rows.length>14?`<div class="row"><button onclick="lpAll=!lpAll;render()">${lpAll?'Nur die nächsten 14 Tage':'Alle '+rows.length+' Tage zeigen'}</button></div>`:'')}
+function lpTh(e){const gs=[...new Set(e.c.map(c=>c.g).filter(Boolean))];
+ return `<div class="row">${gs.length?`<button class="chip${fl?'':' on'}" onclick="fl='';render()">Alle</button>`+gs.map(w=>`<button class="chip${fl===w?' on':''}" onclick="fl='${esc(w)}';render()">${esc(w)}</button>`).join(''):''}<button class="chip" onclick="cpy('s')">Tutor-Start-Prompt kopieren</button><label class="in"><input type="checkbox"${eed?' checked':''} onchange="eed=this.checked?1:0;render()">Bearbeiten</label></div>`+
+ e.c.map((c,i)=>fl&&c.g!==fl?'':`<article class="card"><div class="row"><b class="fx">${esc(c.n)}</b>${c.g?`<small>${esc(c.g)}</small>`:''}<small>${c.h} h</small></div><div class="tr"><i class="g2" style="width:${cp0(c)*100}%"></i></div>`+
+ (eed?`<div class="row"><input class="fx" value="${esc(c.n)}" onchange="C('${e.id}',${i},'n',this.value)"><input type="number" min="0" step=".5" value="${c.h}" style="width:72px" onchange="C('${e.id}',${i},'h',+this.value)"><input value="${esc(c.g||'')}" placeholder="Gruppe/Vortragende" size="14" onchange="C('${e.id}',${i},'g',this.value)"><button onclick="CD('${e.id}',${i})">Kapitel löschen</button></div><textarea rows="${Math.max(3,(c.k||[]).length+1)}" placeholder="Eine Kernkompetenz pro Zeile, Typ vorn: H: Herleitung, S: Skizze, D: Definition, R: Rechnen, M: Merken" onchange="CK('${e.id}',${i},this.value)">${esc((c.k||[]).map(q=>q.t+': '+q.x).join('\n'))}</textarea>`:
+ (c.k&&c.k.length?`<ul class="ul">${c.k.map((q,j)=>`<li><label class="in"><input type="checkbox"${q.d?' checked':''} onchange="CQ('${e.id}',${i},${j},this.checked)"><span class="ty">${TY[q.t]||q.t}</span><span>${esc(q.x)}</span></label></li>`).join('')}</ul>`:`<label class="in"><input type="checkbox"${c.d?' checked':''} onchange="C('${e.id}',${i},'d',this.checked)">Kapitel erledigt</label>`)+`<div class="row"><button onclick="cpy('t${i}')">Abfrage-Prompt kopieren</button></div>`)+`</article>`).join('')+
+ `<div class="row"><button onclick="CA('${e.id}')">+ Kapitel</button></div>`+(eed?`<div class="card"><b>Prüfungsinfos &amp; Antwort-Stil</b> <small>(fließt in die Tutor-Prompts ein)</small><textarea rows="4" onchange="E('${e.id}','no',this.value)">${esc(e.no||'')}</textarea><div class="row"><label>Wiederholungsanteil %<input type="number" min="0" max="60" value="${rvOf(e)}" style="width:80px" onchange="E('${e.id}','rv',+this.value)"></label><label>Wiederholungs-Tage<input type="number" min="1" max="10" value="${bfOf(e)}" style="width:80px" onchange="E('${e.id}','bf',+this.value)"></label><label class="in"><input type="checkbox"${e.rd?' checked':''} onchange="E('${e.id}','rd',this.checked?1:0)">Wiederholung abgeschlossen</label></div></div>`:'')}
+const mmss=s=>pad(Math.floor(Math.max(s,0)/60))+':'+pad(Math.max(s,0)%60);
+function stopT(){clearInterval(run);run=null}
+function tmr(){if(run)stopT();else run=setInterval(()=>{tm--;const el=$('tm');if(el)el.textContent=mmss(tm);if(tm<=0){stopT();render()}},1000);render()}
+function drawPx(e){const pool=[];e.c.forEach(c=>(c.k&&c.k.length?c.k:[{t:'M',x:'Thema: '+c.n}]).forEach(k=>pool.push({n:c.n,g:c.g||'',t:k.t,x:k.x,ok:0})));
+ const gs=[...new Set(pool.map(p=>p.g))],n=e.pq||5,sh=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a},r=[];
+ gs.forEach((g,i)=>{const k=Math.floor(n/gs.length)+(i<n%gs.length?1:0);r.push(...sh(pool.filter(p=>p.g===g)).slice(0,k))});px=r;tm=(e.pm||60)*60;stopT()}
+function lpPr(e){return `<div class="card"><b>Probeprüfung wie am Prüfungstag</b><div class="row"><label>Fragen<input type="number" min="1" max="30" value="${e.pq||5}" style="width:70px" onchange="E('${e.id}','pq',+this.value)"></label><label>Minuten<input type="number" min="5" max="300" value="${e.pm||60}" style="width:70px" onchange="E('${e.id}','pm',+this.value)"></label><button class="on" onclick="drawPx(fe('${e.id}'));render()">${px?'Neue Fragen ziehen':'Probeprüfung ziehen'}</button></div><small>Die Fragen stammen aus den Kernkompetenzen deiner Checkliste (bei Gruppen gleichmäßig verteilt). Beantworte sie auf Papier mit Herleitung und Skizze.</small></div>`+
+ (px?`<div class="card"><span class="mut">Verbleibende Zeit</span><div class="big" id="tm">${mmss(tm)}</div><div class="row"><button class="on" onclick="tmr()">${run?'Pause':(tm<(e.pm||60)*60?'Weiter':'Timer starten')}</button><button onclick="tm=(fe('${e.id}').pm||60)*60;stopT();render()">Zurücksetzen</button></div></div>`+
+ px.map((q,i)=>`<article class="card"><div class="row"><b>Frage ${i+1}</b>${q.g?`<small>${esc(q.g)}</small>`:''}<small>${esc(q.n)} · ${TY[q.t]||q.t}</small></div><div>${esc(q.x)}</div><div class="row"><label class="in"><input type="checkbox"${q.ok?' checked':''} onchange="px[${i}].ok=this.checked?1:0">Bearbeitet</label><button onclick="cpy('q${i}')">Korrektur-Prompt kopieren</button></div></article>`).join(''):'')}
+function mkP(c,e){const no=e.no?' '+e.no:'',fn='für „'+e.n+'“ (TU Wien)';
+ if(c==='s')return 'Du agierst ab sofort als Fachtutor und Prüfungs-Coach '+fn+'. Antworte präzise und strukturiert.'+no+' Bestätige kurz und warte auf meine erste Frage.';
+ if(c[0]==='t'){const ch=e.c[+c.slice(1)];return 'Du bist mein Prüfungs-Coach '+fn+'. Thema: „'+ch.n+'“'+(ch.g?' ('+ch.g+')':'')+'. Stelle mir nacheinander diese Prüfungsfragen, warte jeweils auf meine Antwort und korrigiere streng: '+(ch.k&&ch.k.length?ch.k.map((q,i)=>(i+1)+') '+q.x).join('; '):'Erkläre die wichtigsten Konzepte dieses Themas')+'.'+no}
+ const q=px[+c.slice(1)];return 'Du bist mein Prüfungs-Coach '+fn+'. Ich beantworte gleich diese Prüfungsfrage ('+q.n+(q.g?', '+q.g:'')+'): „'+q.x+'“. Warte auf meine Antwort, bewerte sie wie ein strenger Prüfer (Vollständigkeit, Herleitungsschritte, Skizze, Einheiten) und nenne mir fehlende Punkte.'+no}
+function cpy(c){const e=fe(sel),b=event.target,txt=mkP(c,e),l=b.dataset.l||b.textContent;b.dataset.l=l;const ok=()=>{b.textContent='Kopiert';setTimeout(()=>b.textContent=l,1500)},fb=()=>{const a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(x){}a.remove()};try{navigator.clipboard.writeText(txt).then(ok,fb)}catch(x){fb()}}
+
+function vTd(P){const A=S.td.filter(t=>!t.done).sort((a,b)=>(a.d||'9')<(b.d||'9')?-1:1),D=S.td.filter(t=>t.done),miss=S.ex.filter(e=>!e.off&&!e.dn&&e.o[e.s]>=P.t0&&!S.td.some(t=>t.k===e.id&&t.ty==='an'));
+ return `<div class="card"><b>Aufgabe oder Frist hinzufügen</b><div class="row"><label>Art<select id="ta"><option value="to">Aufgabe</option><option value="an">Anmeldung</option><option value="ab">Abmeldung</option></select></label><label>Fach<select id="tk"><option value="">–</option>${sx().map(e=>`<option value="${e.id}">${esc(e.n)}</option>`).join('')}</select></label><label class="fx">Titel (optional)<input id="tt"></label><label>Fällig am<input id="tdd" size="10" placeholder="TT.MM.JJJJ"></label><label>Uhrzeit<input id="tdt" type="time"></label><button class="on" onclick="addTd()">Hinzufügen</button></div><div id="tm2" class="bad"></div></div>
+${miss.length?`<div class="card"><b>Noch keine Anmeldung eingetragen</b><div>${miss.map(e=>`<button class="chip" onclick="qa('${e.id}')">+ ${esc(e.n)}</button>`).join(' ')}</div></div>`:''}
+<div class="card"><b>Offen (${A.length})</b>${A.map(tdRow).join('')||'<div><small>Alles erledigt.</small></div>'}</div><div class="card"><b>Erledigt (${D.length})</b>${D.map(tdRow).join('')||'<div><small>Noch nichts.</small></div>'}</div>`}
+function vSet(){return `<div class="card"><b>Lernzeit-Fenster pro Wochentag</b><br><small>Der Planer legt Lernblöcke in die freien Lücken deines Kalenders (nach Abzug von Terminen, Fahrzeit und Pausen). Gelöschte Termine geben ihre Zeit automatisch frei. Das Fenster-Ende (z. B. 20:00) berücksichtigt dein Abendessen und erscheint nicht im Kalender.</small>
+<div class="row">${DN.map((n,i)=>`<label>${n}<span class="row"><input type="time" value="${ht(S.win[2*i])}" onchange="WN(${2*i},this.value)"><input type="time" value="${ht(S.win[2*i+1])}" onchange="WN(${2*i+1},this.value)"></span></label>`).join('')}</div>
+<div class="row">${DN.map((n,i)=>`<label>max. h ${n}<input type="number" min="0" max="14" step=".5" value="${S.mx[i]}" style="width:64px" onchange="S.mx[${i}]=+this.value;up()"></label>`).join('')}</div>
+<div class="row"><label>Fahrzeit pro Weg (h)<input type="number" min="0" max="4" step=".25" value="${S.cm}" style="width:84px" onchange="S.cm=+this.value;up()"></label><label>Echte Lernzeit in freien Lücken (%)<input type="number" min="40" max="100" value="${S.pf}" style="width:84px" onchange="S.pf=+this.value;up()"></label><label>Mindestlänge Lernblock (Min.)<input type="number" min="10" max="240" step="5" value="${Math.round(S.mn[0]*60)}" style="width:84px" onchange="MNL(0,this.value)"></label><label>Mindestlänge Wiederholung (Min.)<input type="number" min="10" max="240" step="5" value="${Math.round(S.mn[1]*60)}" style="width:84px" onchange="MNL(1,this.value)"></label></div><small>Fahrzeit wird nur vor und nach Terminen mit „Vor Ort (Uni)“ abgezogen und nicht angezeigt.</small>
+<label>Freie Tage (TT.MM.JJJJ, mehrere mit Komma, Bereich mit „bis“)<input value="${esc(S.free.split(',').filter(Boolean).map(de).join(', '))}" onchange="S.free=pdl(this.value).join(',');up()"></label></div>
+<div class="card"><b>Wöchentliche Aufgaben mit Zeitfenster</b><br><small>Jede Aufgabe wird nur zwischen Freigabe und Abgabe eingeplant und ist „Puffer“ Tage vor der Abgabe fertig. Beispiel Mathe-HÜ: Freigabe Di 19:00, Abgabe Mo 13:00 (der Folgewoche). Ohne Freigabe gilt: 6 Tage vor der Abgabe. Das funktioniert genauso für neue Aufgaben.</small>${S.wk.map((w,i)=>`<div class="wkb"><div class="row"><input class="fx" value="${esc(w.n)}" onchange="WK(${i},'n',this.value)"><label>Aufwand (h)<input type="number" step=".5" min="0" value="${w.h}" style="width:70px" onchange="WK(${i},'h',+this.value)"></label><button onclick="S.wk.splice(${i},1);up()">Löschen</button></div>
+<div class="row"><label>Freigabe<select onchange="WK(${i},'rw',this.value===''?null:+this.value)"><option value="">6 Tage vorher</option>${DN.map((n,j)=>`<option value="${j}"${w.rw===j?' selected':''}>${n}</option>`).join('')}</select></label><label>um<input type="time" value="${w.rt==null?'':ht(w.rt)}" onchange="WK(${i},'rt',th(this.value))"></label><label>Abgabe<select onchange="WK(${i},'dw',+this.value)">${DN.map((n,j)=>`<option value="${j}"${dwOf(w)===j?' selected':''}>${n}</option>`).join('')}</select></label><label>um<input type="time" value="${w.tm==null?'':ht(w.tm)}" onchange="WK(${i},'tm',th(this.value))"></label><label>Puffer (Tage)<input type="number" min="0" max="6" value="${typeof w.bu==='number'?w.bu:1}" style="width:64px" onchange="WK(${i},'bu',+this.value)"></label></div>
+<div class="row"><label>gilt von<input type="date" value="${w.a}" onchange="WK(${i},'a',this.value)"></label><label>bis<input type="date" value="${w.z}" onchange="WK(${i},'z',this.value)"></label></div></div>`).join('')}<button onclick="WA()">+ Aufgabe</button></div>`}
+
+/* ===== Kalender ===== */
+function nav(k){const d=prs(cal.d);if(cal.v==='w')d.setDate(d.getDate()+7*k);else if(cal.v==='d')d.setDate(d.getDate()+k);else d.setMonth(d.getMonth()+k,1);cal.d=fmt(d);render()}
+function items(d,P){const R=busy(d),x=P.dm[d];if(x)place(x).forEach((b,i)=>R.push({a:b.s,b:b.e,n:b.n,k:'ka',s:'au',id:i}));
+ S.wk.forEach(w=>wkDates(w).forEach(due=>{if(S.dn[w.id+'@'+due])return;if(due===d&&w.tm!=null)R.push({a:w.tm-.5,b:w.tm,n:'Abgabe: '+w.n,k:'kd',s:'dl',id:'',c:1,m:1});const r=relOf(w,due);if(r[0]===d&&r[1]!=null)R.push({a:r[1],b:r[1]+.5,n:'Freigabe: '+w.n,k:'kd',s:'dl',id:'',c:3})}));
+ S.td.forEach(t=>{if(t.d===d&&t.tm!=null&&!t.done)R.push({a:t.tm-.5,b:t.tm,n:'Frist: '+t.t,k:'kd',s:'dl',id:'',c:4})});
+ return R.sort((p,q)=>p.a-q.a)}
+function pick(d,ev){cal.d=d;const a=ev&&ev.target.classList.contains('dc')?H0+Math.floor(ev.offsetY/RH):null;cal.e=a!=null?{s:'new',d,a,b:a+1,c:2,ty:'t'}:null;render()}
+function evc(ev,s,id,d){ev.stopPropagation();cal.d=d;
+ if(s==='ex'){sel=id;tab='pl';lp='plan';render();return}
+ if(s==='au'){const x=plan().dm[d],b=x&&place(x)[+id];if(!b)return;cal.e={s,d,n:b.n,a:b.s,b:b.e,k:b.k}}
+ else if(s==='fx'){const f=S.fx.find(x=>x.id===id);cal.e={s,id,d,n:f.n,a:f.a,b:f.b,c:f.c,m:f.m,uc:f.uc,f:f.f,u:f.u}}
+ else if(s==='me'){const m=S.me.find(x=>x.id===id);cal.e={s,id,d:m.d,n:m.t,a:m.a,b:m.b,c:m.c,m:m.m,uc:m.uc,ty:m.ty,k:m.k}}
+ else return;render()}
+function lay(L){const R=L.filter(i=>i.b>i.a).sort((p,q)=>p.a-q.a||q.b-p.b);let cl=[],end=-1;
+ const fl=()=>{cl.forEach((col,ci)=>col.forEach(it=>{it.ci=ci;it.cn=cl.length}));cl=[]};
+ for(const it of R){if(cl.length&&it.a>=end){fl();end=-1}let ci=cl.findIndex(col=>col[col.length-1].b<=it.a);if(ci<0){cl.push([]);ci=cl.length-1}cl[ci].push(it);end=Math.max(end,it.b)}
+ fl();return R}
+function wkv(P){const d1=cal.v==='d',mon=add(cal.d,-wd(cal.d)),D=d1?[cal.d]:[0,1,2,3,4,5,6].map(i=>add(mon,i)),fr=S.free.split(/[,\s]+/),
+ ad=d=>S.ex.filter(e=>!e.off&&!e.dn&&e.o[e.s]===d&&e.a==null).map(e=>`<i style="background:${PAL[1]}" title="${esc(e.n)}">★ ${esc(e.n)}</i>`).join('')+(fr.includes(d)?`<i style="background:${PAL[7]}">frei</i>`:'')+S.td.filter(t=>!t.done&&t.d===d&&t.tm==null).map(t=>`<i style="background:${PAL[4]}">☐ ${esc(t.t)}</i>`).join('')+S.wk.filter(w=>w.tm==null&&wkDates(w).includes(d)&&!S.dn[w.id+'@'+d]).map(w=>`<i style="background:${PAL[4]}">☐ ${esc(w.n)}</i>`).join('');
+ return `<div class="wg" style="grid-template-columns:34px repeat(${D.length},minmax(0,1fr))"><div></div>${D.map(d=>`<button class="wh${d===P.t0?' td':''}" onclick="pick('${d}')">${DN[wd(d)]}<br>${d.slice(8)}.${d.slice(5,7)}.</button>`).join('')}<div class="mut" style="font-size:10px;padding:2px">ganztägig</div>${D.map(d=>`<div class="ad">${ad(d)}</div>`).join('')}<div class="hl">${Array.from({length:H1-H0},(_,i)=>`<div style="height:${RH}px">${H0+i}</div>`).join('')}</div>${D.map(d=>`<div class="dc${d===cal.d?' sel':''}" style="height:${(H1-H0)*RH}px" onclick="pick('${d}',event)">${lay(items(d,P)).map(it=>{const a=Math.max(it.a,H0),b=Math.min(it.b,H1),c=PAL[it.c??7];return b>a?`<div class="ev${it.k==='ka'?' ka':''}${it.m?' pf':''}" style="top:${(a-H0)*RH}px;height:${(b-a)*RH-1}px;left:calc(${it.ci}*100%/${it.cn} + 1px);right:auto;width:calc(100%/${it.cn} - 2px);${it.k==='ka'?'':'background:'+c+'e6;border-color:'+c}" onclick="evc(event,'${it.s}','${it.id}','${d}')">${it.m?'★ ':''}${esc(it.n)}</div>`:''}).join('')}</div>`).join('')}</div>`}
+function mov(P){const f=prs(cal.d);f.setDate(1);const s0=add(fmt(f),-wd(fmt(f))),c=[];
+ for(let i=0;i<42;i++){const d=add(s0,i),x=P.dm[d],B=busy(d).filter(e=>e.k!=='kx'),ex=S.ex.filter(e=>!e.off&&!e.dn&&e.o[e.s]===d);
+  c.push(`<div class="mc${prs(d).getMonth()===f.getMonth()?'':' om'}${d===cal.d?' sel':''}${d===P.t0?' td':''}" onclick="pick('${d}')"><b>${+d.slice(8)}</b>${ex.map(e=>`<div class="mx">★ ${esc(e.n)}</div>`).join('')}${B.slice(0,2).map(b=>`<div class="mx" style="background:${PAL[b.c??7]}">${b.m?'★ ':''}${esc(b.n)}</div>`).join('')}${B.length>2?`<div class="mm">+${B.length-2} weitere</div>`:''}${x&&x.used>0?`<div class="mh ${cl({c:x.cap,u:x.used,m:0})}">${r5(x.used)} h</div>`:''}</div>`)}
+ return `<div class="mg">${DN.map(n=>`<div class="mhd">${n}</div>`).join('')}${c.join('')}</div>`}
+function dayp(P){const d=cal.d,it=items(d,P),x=P.dm[d],nt=S.ex.filter(e=>!e.off&&!e.dn&&e.o[e.s]===d&&e.a==null);
+ return `<div class="card"><div class="row"><b>${dl(d)}</b><span class="mut fx">${x?r5(x.used)+' / '+r5(x.cap)+' h Lernzeit geplant':''}</span><button onclick="cal.e={s:'new',d:'${d}',a:9,b:10,c:2,ty:'t'};render()">+ Eintrag</button></div>${nt.map(e=>`<div class="row"><span class="chip" style="background:${PAL[1]};color:#fff">ganztägig</span><span>★ Prüfung: ${esc(e.n)} <small>(Uhrzeit fehlt)</small></span></div>`).join('')}${it.map(i=>`<div class="row"><button class="chip" style="${i.k==='ka'?'':'background:'+PAL[i.c??7]+';color:#fff;border-color:transparent'}" onclick="evc(event,'${i.s}','${i.id}','${d}')">${ht(i.a)}–${ht(i.b)}</button><span>${i.m?'★ ':''}${esc(i.n)}</span></div>`).join('')||(nt.length?'':'<small>Keine Einträge. Tippe im Kalender auf einen freien Zeitraum oder auf „+ Eintrag“.</small>')}</div>`}
+function edp(){const e=cal.e;if(!e)return'';
+ if(e.s==='au')return `<div class="sheet"><div><b>Automatisch geplanter Lernblock</b><div class="row"><span class="chip ka">${ht(e.a)}–${ht(e.b)}</span><span>${esc(e.n)}</span></div><small>Wird bei Änderungen am Kalender automatisch neu verteilt. „Fixieren“ macht daraus einen festen Lernblock, den der Planer nicht mehr verschiebt.</small><div class="row"><button class="on" onclick="pinE()">Fixieren</button><button onclick="cal.e=null;render()">Schließen</button></div></div></div>`;
+ const fx=e.s==='fx',nw=e.s==='new';
+ return `<div class="sheet"><div><b>${nw?'Neuer Eintrag':fx?'Serientermin bearbeiten':'Eintrag bearbeiten'}</b>
+<div class="row"><label class="fx">Titel<input id="en" value="${esc(e.n||'')}" placeholder="z. B. VO Hydrologie"></label><label>${fx?'Serie ab':'Datum'}<input id="ed" size="10" value="${de(fx?e.f:e.d)}"></label><label>Von<input id="ea" type="time" value="${e.a!=null?ht(e.a):''}"></label><label>Bis<input id="eb" type="time" value="${e.b!=null?ht(e.b):''}"></label></div>
+<div class="row"><label>Art<select id="et"><option value="t"${e.ty!=='l'?' selected':''}>Termin</option><option value="l"${e.ty==='l'?' selected':''}>Lernblock</option></select></label><label>Fach (Lernblock)<select id="ek"><option value="">–</option>${sx().map(x=>`<option value="${x.id}"${x.id===e.k?' selected':''}>${esc(x.n)}</option>`).join('')}</select></label><label>Wiederholung<select id="er"${nw?'':' disabled'}><option value="">einmalig</option><option value="w"${fx?' selected':''}>wöchentlich</option></select></label><label>Serie bis<input id="ez" size="10" value="${fx?de(e.u):''}" placeholder="TT.MM.JJJJ"></label></div>
+<div class="row">${PAL.map((c,i)=>`<label class="sw" title="${PN[i]}"><input type="radio" name="ec" value="${i}"${i===(e.c??2)?' checked':''}><i style="background:${c}"></i></label>`).join('')}<label class="in"><input type="checkbox" id="em"${e.m?' checked':''}>★ Anwesenheitspflicht</label><label class="in"><input type="checkbox" id="eu"${e.uc?' checked':''}>Vor Ort (Uni, Fahrzeit)</label></div>
+<div class="row"><button class="on" onclick="saveE()">Speichern</button>${nw?'':fx?`<button onclick="delE('one')">Nur diesen Tag löschen</button><button onclick="delE('all')">Ganze Serie löschen</button>`:`<button onclick="delE('all')">Löschen</button>`}<button onclick="cal.e=null;render()">Abbrechen</button></div><div id="cm" class="bad"></div></div></div>`}
+function vCal(P){const v=cal.v,mon=add(cal.d,-wd(cal.d)),p=prs(cal.d);
+ return `<div class="row"><button onclick="nav(-1)">‹</button><button onclick="cal.d=fmt(new Date());render()">Heute</button><button onclick="nav(1)">›</button><b class="fx">${v==='m'?MN[p.getMonth()]+' '+p.getFullYear():v==='d'?dl(cal.d):dl(mon)+' – '+dl(add(mon,6))}</b>${[['d','Tag'],['w','Woche'],['m','Monat']].map(t=>`<button class="${v===t[0]?'on':''}" onclick="cal.v='${t[0]}';render()">${t[1]}</button>`).join('')}</div>
+<div class="row"><small class="lg"><i class="kx"></i>★ Prüfung, Pflichttermin oder Abgabe<i class="ka"></i>automatisch geplante Lernzeit</small></div>${v==='m'?mov(P):wkv(P)}<div style="height:10px"></div>${dayp(P)}${edp()}<div style="height:${cal.e?'280':'0'}px"></div>`}
+function saveE(){const e=cal.e,d=pd($('ed').value),a=th($('ea').value),b=th($('eb').value),n=$('en').value.trim(),rc=document.querySelector('input[name=ec]:checked'),c=rc?+rc.value:2,m=$('em').checked?1:0,uv=$('eu').checked?1:0,ty=$('et').value,k=ty==='l'?$('ek').value:'',r=$('er').value,z=pd($('ez').value);
+ if(!d||a==null||b==null||b<=a){$('cm').textContent='Bitte Datum (TT.MM.JJJJ) und Zeiten angeben (Von vor Bis).';return}
+ const x=fe(k),t=n||(x?x.n:ty==='l'?'Lernen':'Termin');
+ if(e.s==='fx'){Object.assign(S.fx.find(y=>y.id===e.id),{n:t,a,b,c,m,uc:uv,f:d,wd:wd(d),u:z||e.u})}
+ else if(e.s==='me'){Object.assign(S.me.find(y=>y.id===e.id),{d,a,b,t,c,m,uc:uv,ty,k})}
+ else if(r==='w')S.fx.push({id:uid(),n:t,wd:wd(d),a,b,f:d,u:z||add(d,119),c,m,uc:uv,x:[]});
+ else S.me.push({id:uid(),d,a,b,t,ty,k,c,m,uc:uv});
+ cal.d=d;cal.e=null;up()}
+function delE(mode){const e=cal.e;
+ if(e.s==='fx'){const f=S.fx.find(y=>y.id===e.id);if(mode==='all')S.fx=S.fx.filter(y=>y!==f);else(f.x=f.x||[]).push(e.d)}
+ else if(e.s==='me')S.me=S.me.filter(y=>y.id!==e.id);
+ cal.e=null;up()}
+function pinE(){const e=cal.e;S.me.push({id:uid(),d:e.d,a:e.a,b:e.b,t:e.n,ty:'l',k:fe(e.k)?e.k:'',c:0});cal.e=null;up()}
+
+function render(){const P=plan();
+ $('hd').textContent='Heute: '+dl(P.t0)+' · ';
+ $('tabs').innerHTML=TB.map(t=>`<button class="${t[0]===tab?'on':''}" onclick="tab='${t[0]}';render()">${t[1]}</button>`).join('');
+ $('v').innerHTML=({ov:vOv,ca:vCal,ex:vEx,pl:vPl,td:vTd,dy:vDay,se:vSet,io:vIO})[tab](P)}
+
+/* ===== Bearbeiten ===== */
+function E(id,k,v){fe(id)[k]=v;up()}
+function EO(id,v){const e=fe(id),cur=e.o[e.s],o=[...new Set(v.split(/[,;\s]+/).map(pd).filter(Boolean))].sort();if(o.length){e.o=o;e.s=Math.max(0,o.indexOf(cur))}up()}
+function ET(id,k,v){fe(id)[k]=th(v);up()}
+function addEx(){const e={id:uid(),n:'Neue Prüfung',o:[add(fmt(new Date()),30)],s:0,p:1,off:0,a:null,b:null,c:[{n:'Gesamter Stoff',h:40,d:0}]};S.ex.push(e);sel=e.id;up()}
+function delEx(id){S.ex=S.ex.filter(e=>e.id!==id);up()}
+function C(id,i,k,v){fe(id).c[i][k]=v;up()}
+function CD(id,i){fe(id).c.splice(i,1);up()}
+function CA(id){fe(id).c.push({n:'Neues Kapitel',h:4,d:0,k:[]});up()}
+function CK(id,i,v){const c=fe(id).c[i],old=c.k||[];c.k=v.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{const m=l.match(/^([HSDRM])\s*:\s*(.+)$/i),t=m?m[1].toUpperCase():'M',x=m?m[2]:l,o=old.find(q=>q.x===x);return{t,x,d:o?o.d:0}});up()}
+function CQ(id,i,j,v){fe(id).c[i].k[j].d=v?1:0;up()}
+function WK(i,k,v){S.wk[i][k]=v;up()}
+function WA(){const t=fmt(new Date());S.wk.push({id:uid(),n:'Neue Aufgabe',h:2,a:add(t,7),z:add(t,70),dw:wd(add(t,7)),tm:null,rw:null,rt:null,bu:1});up()}
+function WN(i,v){const h=th(v);if(h!=null)S.win[i]=h;up()}
+function MNL(i,v){S.mn[i]=Math.max(10,+v||0)/60;up()}
+function TD(id,k,v){S.td.find(t=>t.id===id)[k]=v;up()}
+function addTd(){const ty=$('ta').value,k=$('tk').value,x=fe(k),ds=$('tdd').value.trim(),d=ds?pd(ds):'';
+ if(d===null){$('tm2').textContent='Datum bitte als TT.MM.JJJJ angeben.';return}
+ const t=$('tt').value.trim()||((ty==='an'?'Anmeldung: ':ty==='ab'?'Abmeldung: ':'')+(x?x.n:'')).trim();
+ if(!t){$('tm2').textContent='Bitte Titel oder Fach angeben.';return}
+ S.td.push({id:uid(),t,d,k,ty,done:0,tm:th($('tdt').value)});up()}
+function qa(id){$('ta').value='an';$('tk').value=id;$('tdd').focus()}
+
+
+function wsum(P){const m={};P.days.forEach(x=>{const w=add(x.d,-wd(x.d)),o=m[w]=m[w]||{w,c:0,u:0,m:0};o.c+=x.cap;o.u+=x.used});
+ P.T.forEach(t=>{if(t.r>.01){const w=add(t.due,-wd(t.due));if(m[w])m[w].m+=t.r}});
+ return Object.keys(m).sort().map(k=>m[k])}
+const cl=x=>{const d=x.u+x.m,r=x.c?d/x.c:(d?9:0);return x.m>.5?'g5':r>.9?'g4':r>.7?'g3':r>.4?'g2':'g1'};
+
+function vDay(P){
+ const n=S.show||14,lim=add(P.t0,n),
+ wl=P.T.filter(t=>t.w&&t.d<=add(P.t0,14)&&(!S.dn[t.wkk]||t.d>=add(P.t0,-7))).sort((a,b)=>a.d<b.d?-1:1);
+ return `<div class="card"><b>Wöchentliche Aufgaben</b>${wl.map(t=>`<div class="row"><input type="checkbox"${S.dn[t.wkk]?' checked':''} onchange="S.dn['${t.wkk}']=this.checked?1:0;up()"><span class="fx">${esc(t.n)} <small>ab ${dl(t.rd)}${t.rt!=null?' '+ht(t.rt):''} · fällig ${dl(t.d)}${t.w.tm!=null?' '+ht(t.w.tm):''} · ${t.w.h} h</small></span></div>`).join('')||'<small>Keine.</small>'}</div>
+<div class="row"><label>Tage anzeigen<input type="number" min="3" max="120" value="${n}" style="width:76px" onchange="S.show=+this.value||14;up()"></label></div>
+${P.days.filter(x=>x.d<lim).map(x=>{const e=S.ex.filter(y=>!y.off&&y.o[y.s]===x.d),v=S.ev.filter(y=>y.d===x.d);
+ return `<div class="card"><div class="row"><b>${dl(x.d)}</b><span class="mut">${r5(x.used)} / ${r5(x.cap)} h Lernzeit</span></div>${e.map(y=>`<div class="bad">Prüfung: ${esc(y.n)}</div>`).join('')}${v.map(y=>`<div class="mut">Termin: ${esc(y.t)}${y.h?' ('+y.h+' h)':''}</div>`).join('')}${x.it.map(i=>`<div>${r5(i.h)} h · ${esc(i.n)}</div>`).join('')||'<small>nichts geplant</small>'}</div>`}).join('')}`}
+
+function vIO(){return vSync()+`<div class="card"><b>Kalender &amp; Backup</b>
+<p><small>Plan als .ics erzeugen und in Google-, Apple- oder Outlook-Kalender importieren (am besten in einen eigenen Kalender; bei Neuexport die alten Lern-Termine vorher löschen). Einen Live-Abo-Link kann diese Seite ohne Server nicht bereitstellen. Beim Import werden Termine von der Lernzeit des Tages abgezogen; Wiederholungsregeln werden nicht aufgelöst.</small></p>
+<div class="row"><button onclick="mkICS()">Plan als ICS</button><button onclick="mkJSON()">Backup (JSON)</button><button onclick="cp()">Kopieren</button><button onclick="sv()">Speichern</button></div>
+<textarea id="io" rows="9" placeholder="Hier erscheint der Export. Zum Importieren: ICS-Text oder Backup einfügen bzw. Datei wählen."></textarea>
+<div class="row"><input type="file" accept=".ics,.json,.txt" onchange="rd(this)"><button onclick="impICS()">ICS importieren</button><button onclick="impJSON()">Backup einspielen</button></div>
+<div class="row"><button onclick="dbInit()">Cloud neu verbinden</button><small>Der Status steht oben neben „Heute“.</small></div><p id="msg" class="mut"></p><p>${S.ev.length} importierte Termine <button onclick="S.ev=[];up()">entfernen</button></p></div>`}
+
+/* Kalender & Backup */
+function icsText(){
+ const P=plan(),z=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z',u=s=>s.replace(/-/g,''),
+ T8=(d,h)=>{const x=new Date(prs(d).getTime()+h*36e5);return u(fmt(x))+'T'+pad(x.getHours())+pad(x.getMinutes())+'00'},
+ L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Semesterplaner//DE','CALSCALE:GREGORIAN','X-WR-CALNAME:Semesterplaner','REFRESH-INTERVAL;VALUE=DURATION:PT1H','X-PUBLISHED-TTL:PT1H'],
+ V=(id,s,a,b,all)=>L.push('BEGIN:VEVENT','UID:'+id+'@semesterplaner','DTSTAMP:'+z,'DTSTART'+(all?';VALUE=DATE:':':')+a,'DTEND'+(all?';VALUE=DATE:':':')+b,'SUMMARY:'+s.replace(/([,;\\])/g,'\\$1'),'END:VEVENT');
+ S.ex.forEach(e=>{const d=e.o[e.s];if(e.off||!d)return;e.a!=null&&e.b>e.a?V('x'+e.id,'Prüfung: '+e.n,T8(d,e.a),T8(d,e.b)):V('x'+e.id,'Prüfung: '+e.n,u(d),u(add(d,1)),1)});
+ S.me.forEach(m=>V('m'+m.id,(m.ty==='l'?'Lernen: ':'')+m.t,T8(m.d,m.a),T8(m.d,m.b)));
+ S.wk.forEach(w=>wkDates(w).forEach(d=>{if(S.dn[w.id+'@'+d])return;if(w.tm!=null)V('d'+w.id+u(d),'Abgabe: '+w.n,T8(d,w.tm-.5),T8(d,w.tm));const r=relOf(w,d);if(r[1]!=null)V('f'+w.id+u(d),'Freigabe: '+w.n,T8(r[0],r[1]),T8(r[0],r[1]+.5))}));
+ P.days.forEach(x=>place(x).forEach((b,k)=>V('s'+u(x.d)+k,'Lernen: '+b.n,T8(x.d,b.s),T8(x.d,b.e))));
+ L.push('END:VCALENDAR');return L.join('\r\n')}
+function mkICS(){$('io').value=icsText();msg('ICS erzeugt: Prüfungen, Abgaben, eigene Einträge und geplante Lernblöcke.')}
+function mkJSON(){$('io').value=JSON.stringify(S,null,1);msg('Backup erzeugt – speichern oder kopieren.')}
+function cp(){const t=$('io');t.select();(navigator.clipboard?navigator.clipboard.writeText(t.value):Promise.reject()).catch(()=>{try{document.execCommand('copy')}catch(e){}});msg('Kopiert (falls der Browser es erlaubt).')}
+async function sv(){const t=$('io').value;if(!t)return msg('Zuerst einen Export erzeugen.');
+ if(typeof claude==='undefined'){const ics=t.startsWith('BEGIN:VCALENDAR'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:ics?'text/calendar':'application/json'}));a.download=ics?'semesterplan.ics':'planer-backup.json';document.body.appendChild(a);a.click();a.remove();return msg('Datei erzeugt.')}
+ try{const d=await window.claude.use('downloads');if(!d)return msg('Speichern ist hier nicht verfügbar – bitte „Kopieren“ nutzen.');
+ const ics=t.startsWith('BEGIN:VCALENDAR');await d.save({filename:ics?'semesterplan.txt':'planer-backup.json',data:t});
+ msg(ics?'Gespeichert. Endung .txt in .ics ändern, dann im Kalender importieren.':'Backup gespeichert.')}catch(e){msg('Nicht gespeichert ('+(e&&e.code||'Fehler')+').')}}
+function rd(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{$('io').value=r.result;msg('Datei geladen – jetzt importieren.')};r.readAsText(f)}
+function impICS(){
+ const t=$('io').value.replace(/\r?\n[ \t]/g,''),n=[];
+ t.split('BEGIN:VEVENT').slice(1).forEach(b=>{
+  const g=k=>{const m=b.match(new RegExp('(?:^|\\n)'+k+'[^:\\n]*:([^\\r\\n]*)'));return m?m[1]:''},
+  P=v=>{const m=v.match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})(Z?))?/);if(!m||!m[4])return null;return m[7]?new Date(Date.UTC(+m[1],m[2]-1,+m[3],+m[4],+m[5],+m[6])):new Date(+m[1],m[2]-1,+m[3],+m[4],+m[5],+m[6])},
+  a=g('DTSTART'),x=P(a),y=P(g('DTEND')),d=x?fmt(x):a.slice(0,4)+'-'+a.slice(4,6)+'-'+a.slice(6,8);
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return;
+  n.push({d,a:x?x.getHours()+x.getMinutes()/60:null,h:x&&y?Math.min(12,Math.max(0,r5((y-x)/36e5))):0,t:g('SUMMARY').replace(/\\([,;])/g,'$1')||'Termin'})});
+ S.ev=S.ev.concat(n.filter(e=>!S.ev.some(o=>o.d===e.d&&o.t===e.t&&o.h===e.h)));up();msg(n.length+' Termine gelesen.')}
+function impJSON(){try{const o=JSON.parse($('io').value);if(!o||!o.ex)throw 0;S=mig(o);up();msg('Backup eingespielt.')}catch(e){msg('Kein gültiges Backup im Textfeld.')}}
+
+gh=ghc();render();dbInit();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&gh&&!cloud&&!ct&&!cbusy)ghPull().catch(()=>{})});
+</script>
+</body>
+</html>
